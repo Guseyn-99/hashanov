@@ -3,9 +3,9 @@
 <title>Словарь и частоты · Hashanov</title><link rel="stylesheet" href="../style.css"><script defer src="../script.js"></script></head>
 <body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
 <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
-<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a></nav></div></header>
+<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics" aria-current="location">Модули</a><a href="../games.html">Игры</a></nav></div></header>
 <main class="shell reading" id="main"><article>
-<header class="lesson-head"><p class="eyebrow">Хеш-структуры</p><h1>Словарь и частоты</h1><p>Нужно помнить дополнительную информацию о числе. Например, сколько раз оно уже встретилось.</p></header>
+<header class="lesson-head"><p class="eyebrow">Модуль 03 · Хеш-структуры</p><h1>Словарь и частоты</h1><p>Нужно помнить дополнительную информацию о числе. Например, сколько раз оно уже встретилось.</p></header>
 <nav class="jump" aria-label="На этой странице"><a href="#trace">Разбор</a><a href="#cost">Сложность</a><a href="#practice">Практика</a><a href="#quiz">Тест</a></nav>
 <section class="idea" id="idea"><h2>Как я рассуждаю</h2><p>Число беру как ключ, количество — как значение. Если ключ новый, начинаю с нуля. При каждом появлении увеличиваю его счётчик на один.</p></section>
 <section id="trace"><h2>Разбор по шагам</h2><p>Посчитай, сколько раз каждое число встречается в списке [4, 7, 4, 4].</p><div class="player" data-frames="[{&quot;line&quot;: 2, &quot;indices&quot;: [], &quot;state&quot;: {&quot;counts&quot;: &quot;{}&quot;}, &quot;note&quot;: &quot;Словарь частот пока пуст.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [0], &quot;state&quot;: {&quot;x&quot;: &quot;4&quot;, &quot;counts&quot;: &quot;{4: 1}&quot;}, &quot;note&quot;: &quot;Для ключа 4 было 0. Добавляем одно появление.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [1], &quot;state&quot;: {&quot;x&quot;: &quot;7&quot;, &quot;counts&quot;: &quot;{4: 1, 7: 1}&quot;}, &quot;note&quot;: &quot;Для ключа 7 было 0. Добавляем одно появление.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [2], &quot;state&quot;: {&quot;x&quot;: &quot;4&quot;, &quot;counts&quot;: &quot;{4: 2, 7: 1}&quot;}, &quot;note&quot;: &quot;Для ключа 4 было 1. Добавляем одно появление.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [3], &quot;state&quot;: {&quot;x&quot;: &quot;4&quot;, &quot;counts&quot;: &quot;{4: 3, 7: 1}&quot;}, &quot;note&quot;: &quot;Для ключа 4 было 2. Добавляем одно появление.&quot;}, {&quot;line&quot;: 5, &quot;indices&quot;: [], &quot;state&quot;: {&quot;counts&quot;: &quot;{4: 3, 7: 1}&quot;}, &quot;note&quot;: &quot;Четвёрка встретилась трижды, семёрка — один раз.&quot;}]">
@@ -25,7 +25,27 @@
 <section id="cost"><h2>Сложность и границы</h2><p>Для целочисленных ключей получение и запись в среднем занимают O(1). Проход занимает O(n) в среднем. В словаре k записей по количеству разных чисел, память O(k).</p><details><summary>Границы и частые ошибки</summary><p>counts[x] += 1 для нового ключа вызовет KeyError. Вызов get(x, 0) даёт стартовое значение; запись появляется при присваивании counts[x] = … .</p></details></section>
 <section id="practice"><h2>Самостоятельная практика</h2><p>Напиши first_single(nums). Верни первое число, которое встретилось ровно один раз. Если такого числа нет, верни None.</p><details><summary>Примеры для проверки</summary><p>first_single([4, 7, 4, 2]) → 7; first_single([3, 3]) → None. Подсказка: сначала собери частоты, затем пройди по исходному списку.</p></details>
 <details><summary>Ещё одна задача</summary><p>Как изменится словарь после ещё одной семёрки? Изменится ли len(counts)?</p><details><summary>Подсказка</summary><p>Длина словаря равна числу разных ключей.</p></details>
-<details><summary>Сверить ответ</summary><p>{4: 3, 7: 2}. Длина останется равной 2, потому что ключ 7 уже был.</p></details></details></section><section class="quiz" id="quiz"><h2>Проверь себя</h2><form><fieldset data-answer="0"><legend>1. Что вернёт {}.get(7, 0)?</legend>
-<div class="options"><label><input type="radio" name="q1" value="0"><span>0</span></label><label><input type="radio" name="q1" value="1"><span>7</span></label><label><input type="radio" name="q1" value="2"><span>1</span></label></div><p class="feedback" role="status" data-why="Ключа 7 пока нет. Метод возвращает заданное значение по умолчанию."></p></fieldset><fieldset data-answer="2"><legend>2. В словаре {4: 3, 7: 1} увеличили счётчик числа 4. Сколько ключей теперь?</legend>
-<div class="options"><label><input type="radio" name="q2" value="0"><span>3</span></label><label><input type="radio" name="q2" value="1"><span>4</span></label><label><input type="radio" name="q2" value="2"><span>2</span></label></div><p class="feedback" role="status" data-why="Изменилось значение существующего ключа. Ключи по-прежнему 4 и 7."></p></fieldset>
-<div class="controls"><button type="reset">Сбросить ответы</button></div></form></section></article></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>
+<details><summary>Сверить ответ</summary><p>{4: 3, 7: 2}. Длина останется равной 2, потому что ключ 7 уже был.</p></details></details></section><section class="quiz" id="quiz"><h2>Проверь себя</h2><div class="question" role="group" aria-labelledby="question-1">
+<header><span class="eyebrow">Вопрос 1 из 2</span><h3 id="question-1">Что вернёт {}.get(7, 0)?</h3></header>
+<div class="options"><div class="choice"><button type="button" data-correct="1"
+data-reason="Ключа 7 пока нет. Метод возвращает заданное значение по умолчанию."><span class="letter" aria-hidden="true">А</span>
+<span>0</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="0"
+data-reason="7 — искомый ключ. В пустом словаре его пока нет."><span class="letter" aria-hidden="true">Б</span>
+<span>7</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="0"
+data-reason="Единица прибавляется в задаче про счётчик. Здесь вызван только get."><span class="letter" aria-hidden="true">В</span>
+<span>1</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div></div><span class="sr-only" role="status"></span></div><div class="question" role="group" aria-labelledby="question-2">
+<header><span class="eyebrow">Вопрос 2 из 2</span><h3 id="question-2">В словаре {4: 3, 7: 1} увеличили счётчик числа 4. Сколько ключей теперь?</h3></header>
+<div class="options"><div class="choice"><button type="button" data-correct="0"
+data-reason="Увеличился счётчик четвёрок. Новая пара в словарь не добавлялась."><span class="letter" aria-hidden="true">А</span>
+<span>3</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="0"
+data-reason="Теперь 4 встречается четыре раза. Вопрос про количество разных ключей."><span class="letter" aria-hidden="true">Б</span>
+<span>4</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="1"
+data-reason="Изменилось значение существующего ключа. Ключи по-прежнему 4 и 7."><span class="letter" aria-hidden="true">В</span>
+<span>2</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div></div><span class="sr-only" role="status"></span></div>
+<div class="controls"><button type="button" data-retry>Ответить заново</button></div></section></article></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>

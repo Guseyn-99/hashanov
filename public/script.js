@@ -44,21 +44,38 @@ function setupPlayer(player) {
   draw()
 }
 
-function setupQuiz(form) {
-  for (const field of form.querySelectorAll('fieldset')) {
-    const feedback = field.querySelector('.feedback')
-
-    field.addEventListener('change', event => {
-      const correct = event.target.value === field.dataset.answer
-      feedback.textContent = (correct ? 'Верно. ' : 'Неверно. ') + feedback.dataset.why
-      field.dataset.result = correct ? 'yes' : 'no'
-    })
-
-    form.addEventListener('reset', () => {
-      feedback.textContent = ''
-      field.removeAttribute('data-result')
+function setupQuiz(quiz) {
+  const choices = [...quiz.querySelectorAll('.choice button')]
+  for (const button of choices) {
+    button.addEventListener('click', () => {
+      if (button.getAttribute('aria-disabled') === 'true') return
+      const question = button.closest('.question')
+      const correct = button.dataset.correct === '1'
+      const message = (correct ? 'Верно. ' : 'Неверно. ') + button.dataset.reason
+      const note = button.nextElementSibling
+      button.parentElement.dataset.result = correct ? 'yes' : 'no'
+      button.querySelector('.mark').textContent = correct ? '✓' : '×'
+      note.hidden = false
+      note.textContent = message
+      button.setAttribute('aria-describedby', note.id || (note.id = question.querySelector('h3').id + '-' + choices.indexOf(button)))
+      question.querySelector('[role=status]').textContent = message
+      button.setAttribute('aria-disabled', 'true')
+      if (correct) {
+        for (const option of question.querySelectorAll('button')) option.setAttribute('aria-disabled', 'true')
+      }
     })
   }
+  quiz.querySelector('[data-retry]').addEventListener('click', () => {
+    for (const button of choices) {
+      button.removeAttribute('aria-disabled')
+      button.removeAttribute('aria-describedby')
+      button.parentElement.removeAttribute('data-result')
+      button.querySelector('.mark').textContent = ''
+      button.nextElementSibling.hidden = true
+    }
+    quiz.querySelectorAll('[role=status]').forEach(status => { status.textContent = '' })
+    choices[0].focus()
+  })
 }
 
 function setupWindow(box) {
@@ -101,5 +118,5 @@ function setupWindow(box) {
 }
 
 document.querySelectorAll('.player').forEach(setupPlayer)
-document.querySelectorAll('.quiz form').forEach(setupQuiz)
+document.querySelectorAll('.quiz').forEach(setupQuiz)
 document.querySelectorAll('[data-window]').forEach(setupWindow)

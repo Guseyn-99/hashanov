@@ -3,52 +3,96 @@ from html import escape
 from pathlib import Path
 import json
 from lessons import drills, lessons
-from interactives import QUESTIONS, walkthrough
+from interactives import QUESTIONS, HINTS, walkthrough
 
 ROOT = Path(__file__).resolve().parent
 PUBLIC = ROOT / 'public'
 
 
-def page(title, body, depth=''):
+def page(title, body, depth='', area='topics', extra_script=''):
     home = depth + 'index.html'
+    contents = '#topics' if title == 'Алгоритмы на Python' else home + '#topics'
+    nav = ''.join(
+        f'<a href="{url}"' + (' aria-current="location"' if area == key else '') + f'>{name}</a>'
+        for key, name, url in [('topics', 'Модули', contents), ('games', 'Игры', depth + 'games.html')])
+    script = f'<script defer src="{depth}{extra_script}"></script>' if extra_script else ''
     return f'''<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{escape(title)} · Hashanov</title><link rel="stylesheet" href="{depth}style.css"><script defer src="{depth}script.js"></script></head>
+<title>{escape(title)} · Hashanov</title><link rel="stylesheet" href="{depth}style.css"><script defer src="{depth}script.js"></script>{script}</head>
 <body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
 <a class="brand" href="{home}"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
-<nav class="topnav" aria-label="Навигация"><a href="{home}#topics">Оглавление</a></nav></div></header>
+<nav class="topnav" aria-label="Навигация">{nav}</nav></div></header>
 {body}<footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>'''
 
 
-def topic_card(item):
-    return f'''<a class="topic-card" href="topics/{item['slug']}.html">
-<strong>{escape(item['title'])}</strong><span>{escape(item['summary'])}</span></a>'''
+MODULES = {
+    'Основы': 'Считаем операции и учимся задавать границы участка.',
+    'Массивы': 'Ищем нужный отрезок и считаем суммы за один проход.',
+    'Хеш-структуры': 'Запоминаем числа и считаем, сколько раз они встретились.',
+}
+
+GAMES = {
+    'seen': ('Охота на повторы', 'Отмечай, какие числа уже встречались.', 'set', 'set()'),
+    'window': ('Поймай окно', 'Найди отрезок с самой большой суммой.', 'fixed-window', '[i:j]'),
+}
 
 
 def homepage():
-    groups = list(dict.fromkeys(item['group'] for item in lessons))
-    catalog = ''
-    for group in groups:
-        cards = ''.join(topic_card(item) for item in lessons if item['group'] == group)
-        catalog += f'<section class="group"><h3>{group}</h3><div class="card-list">{cards}</div></section>'
+    modules = []
+    for number, (group, intro) in enumerate(MODULES.items(), 1):
+        group_lessons = [item for item in lessons if item['group'] == group]
+        rows = ''.join(
+            f'<li><a href="topics/{item["slug"]}.html"><small>{number}.{i}</small>'
+            f'<span>{escape(item["title"])}</span><i aria-hidden="true">›</i></a></li>'
+            for i, item in enumerate(group_lessons, 1))
+        modules.append(f'''<section class="module"><header>
+<p class="eyebrow">Модуль {number:02}</p><h3>{group}</h3><p>{intro}</p></header>
+<ol class="lesson-list">{rows}</ol></section>''')
     return page('Алгоритмы на Python', f'''<main class="shell home" id="main">
-<section class="hero"><p class="eyebrow hero-label">СПРАВОЧНИК ГУСЕЙНА ГАСАНОВА</p>
+<section class="hero"><p class="eyebrow hero-label">Справочник Гусейна Гасанова</p>
 <h1>Алгоритмы на Python<span class="hero-dot">.</span></h1>
-<p class="hero-description">Как узнать задачу, пройти пример руками и объяснить своё решение на собеседовании.</p>
-<a class="button" href="#topics">Выбрать тему</a></section>
-<section class="topics" id="topics"><h2>Темы справочника</h2>{catalog}</section></main>''')
+<p class="hero-description">Разбираю задачи на маленьких примерах и показываю, что происходит на каждом шаге.</p>
+<a class="button" href="#topics">К модулям</a><a class="hero-link" href="games.html">Перейти к играм</a></section>
+<section class="topics" id="topics"><h2>Модули</h2>{''.join(modules)}</section></main>''')
 
 
 def quiz(slug):
     fields = []
     for number, (question, options, correct, why) in enumerate(QUESTIONS[slug], 1):
-        choices = ''.join(
-            f'<label><input type="radio" name="q{number}" value="{i}"><span>{escape(option)}</span></label>'
-            for i, option in enumerate(options))
-        fields.append(f'''<fieldset data-answer="{correct}"><legend>{number}. {escape(question)}</legend>
-<div class="options">{choices}</div><p class="feedback" role="status" data-why="{escape(why, quote=True)}"></p></fieldset>''')
-    return f'''<section class="quiz" id="quiz"><h2>Проверь себя</h2><form>{''.join(fields)}
-<div class="controls"><button type="reset">Сбросить ответы</button></div></form></section>'''
+        choices = []
+        for i, option in enumerate(options):
+            reason = why if i == correct else HINTS[slug][number - 1][i]
+            choices.append(f'''<div class="choice"><button type="button" data-correct="{int(i == correct)}"
+data-reason="{escape(reason, quote=True)}"><span class="letter" aria-hidden="true">{'АБВ'[i]}</span>
+<span>{escape(option)}</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div>''')
+        fields.append(f'''<div class="question" role="group" aria-labelledby="question-{number}">
+<header><span class="eyebrow">Вопрос {number} из 2</span><h3 id="question-{number}">{escape(question)}</h3></header>
+<div class="options">{''.join(choices)}</div><span class="sr-only" role="status"></span></div>''')
+    return f'''<section class="quiz" id="quiz"><h2>Проверь себя</h2>{''.join(fields)}
+<div class="controls"><button type="button" data-retry>Ответить заново</button></div></section>'''
+
+
+def games_index():
+    cards = ''.join(f'''<li><a class="game-link" href="games/{key}.html">
+<span class="game-token" aria-hidden="true">{token}</span><span><strong>{title}</strong><small>{summary}</small></span>
+<i aria-hidden="true">›</i></a></li>''' for key, (title, summary, _, token) in GAMES.items())
+    return page('Игры', f'''<main class="shell home" id="main"><header class="section-intro">
+<p class="eyebrow">Практика на Python</p><h1>Игры</h1><p>Один ход — один шаг алгоритма. В каждой игре три раунда.</p></header>
+<ul class="game-list">{cards}</ul></main>''', area='games')
+
+
+def game_page(key):
+    title, summary, topic, _ = GAMES[key]
+    return page(title, f'''<main class="shell reading" id="main"><a class="backlink" href="../games.html">Все игры</a>
+<header class="section-intro"><h1>{title}</h1><p>{summary}</p></header>
+<section class="game-board" data-game="{key}" aria-label="Игровое поле">
+<div class="game-bar"><strong data-round></strong><span data-score></span></div>
+<div class="arena"><h2 data-task></h2><div class="tiles"></div><p class="game-memory"></p>
+<div class="game-actions controls"></div><p class="game-note" role="status"></p></div>
+<div class="controls game-foot"><button type="button" data-new>Начать сначала</button>
+<button type="button" class="primary" data-next hidden>Следующий раунд</button></div></section>
+<a class="backlink" href="../topics/{topic}.html">Разобрать тему на Python</a></main>''', '../', 'games', 'games.js')
 
 
 def player(d):
@@ -90,7 +134,7 @@ def article(d):
     task, cases = drills[slug]
     extra = window_lab() if slug == 'variable-window' else ''
     return page(d['title'], f'''<main class="shell reading" id="main"><article>
-<header class="lesson-head"><p class="eyebrow">{d['group']}</p><h1>{d['title']}</h1><p>{d['signal']}</p></header>
+<header class="lesson-head"><p class="eyebrow">Модуль {list(MODULES).index(d['group']) + 1:02} · {d['group']}</p><h1>{d['title']}</h1><p>{d['signal']}</p></header>
 <nav class="jump" aria-label="На этой странице"><a href="#trace">Разбор</a><a href="#cost">Сложность</a><a href="#practice">Практика</a><a href="#quiz">Тест</a></nav>
 <section class="idea" id="idea"><h2>Как я рассуждаю</h2><p>{d['idea']}</p></section>
 <section id="trace"><h2>Разбор по шагам</h2><p>{d['problem']}</p>{player(d)}{trace_table(d)}
@@ -104,5 +148,9 @@ def article(d):
 if __name__ == '__main__':
     (PUBLIC / 'topics').mkdir(parents=True, exist_ok=True)
     (PUBLIC / 'index.html').write_text(homepage(), encoding='utf-8')
+    (PUBLIC / 'games').mkdir(exist_ok=True)
+    (PUBLIC / 'games.html').write_text(games_index(), encoding='utf-8')
+    for key in GAMES:
+        (PUBLIC / 'games' / f'{key}.html').write_text(game_page(key), encoding='utf-8')
     for lesson in lessons:
         (PUBLIC / 'topics' / (lesson['slug'] + '.html')).write_text(article(lesson), encoding='utf-8')

@@ -3,9 +3,9 @@
 <title>Как считать сложность · Hashanov</title><link rel="stylesheet" href="../style.css"><script defer src="../script.js"></script></head>
 <body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
 <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
-<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a></nav></div></header>
+<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics" aria-current="location">Модули</a><a href="../games.html">Игры</a></nav></div></header>
 <main class="shell reading" id="main"><article>
-<header class="lesson-head"><p class="eyebrow">Основы</p><h1>Как считать сложность</h1><p>В условии спрашивают, что станет со временем работы, если список вырастет.</p></header>
+<header class="lesson-head"><p class="eyebrow">Модуль 01 · Основы</p><h1>Как считать сложность</h1><p>В условии спрашивают, что станет со временем работы, если список вырастет.</p></header>
 <nav class="jump" aria-label="На этой странице"><a href="#trace">Разбор</a><a href="#cost">Сложность</a><a href="#practice">Практика</a><a href="#quiz">Тест</a></nav>
 <section class="idea" id="idea"><h2>Как я рассуждаю</h2><p>Сначала называю n. Здесь n — количество чисел. Потом считаю, сколько раз выполнится строка внутри цикла. Если на каждое число приходится одна проверка, при удвоении списка число проверок тоже удвоится.</p></section>
 <section id="trace"><h2>Разбор по шагам</h2><p>Посчитай, сколько чётных чисел в списке [4, 7, 2, 9].</p><div class="player" data-frames="[{&quot;line&quot;: 2, &quot;indices&quot;: [], &quot;state&quot;: {&quot;count&quot;: &quot;0&quot;}, &quot;note&quot;: &quot;До начала цикла счётчик равен нулю.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [0], &quot;state&quot;: {&quot;x&quot;: &quot;4&quot;, &quot;count&quot;: &quot;0&quot;}, &quot;note&quot;: &quot;Проверяем остаток: 4 % 2 = 0.&quot;}, {&quot;line&quot;: 5, &quot;indices&quot;: [0], &quot;state&quot;: {&quot;count&quot;: &quot;1&quot;}, &quot;note&quot;: &quot;Число чётное. Увеличиваем счётчик.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [1], &quot;state&quot;: {&quot;x&quot;: &quot;7&quot;, &quot;count&quot;: &quot;1&quot;}, &quot;note&quot;: &quot;Проверяем остаток: 7 % 2 = 1.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [2], &quot;state&quot;: {&quot;x&quot;: &quot;2&quot;, &quot;count&quot;: &quot;1&quot;}, &quot;note&quot;: &quot;Проверяем остаток: 2 % 2 = 0.&quot;}, {&quot;line&quot;: 5, &quot;indices&quot;: [2], &quot;state&quot;: {&quot;count&quot;: &quot;2&quot;}, &quot;note&quot;: &quot;Число чётное. Увеличиваем счётчик.&quot;}, {&quot;line&quot;: 4, &quot;indices&quot;: [3], &quot;state&quot;: {&quot;x&quot;: &quot;9&quot;, &quot;count&quot;: &quot;2&quot;}, &quot;note&quot;: &quot;Проверяем остаток: 9 % 2 = 1.&quot;}, {&quot;line&quot;: 6, &quot;indices&quot;: [], &quot;state&quot;: {&quot;count&quot;: &quot;2&quot;}, &quot;note&quot;: &quot;Четыре числа проверены. Два из них чётные.&quot;}]">
@@ -28,7 +28,27 @@
 <section id="cost"><h2>Сложность и границы</h2><p>O(n) времени и O(1) дополнительной памяти. Проверок ровно n, даже если все числа нечётные. Два таких прохода подряд дают 2n проверок, то есть всё ещё O(n).</p><details><summary>Границы и частые ошибки</summary><p>Вложенный цикл требует отдельного подсчёта. Если для каждого из n чисел второй цикл перебирает все n чисел, получаем n × n проверок и O(n²).</p></details></section>
 <section id="practice"><h2>Самостоятельная практика</h2><p>Напиши count_above(nums, limit). Верни количество чисел строго больше limit за один проход.</p><details><summary>Примеры для проверки</summary><p>count_above([3, 5, 7, 5], 5) → 1; count_above([], 5) → 0.</p></details>
 <details><summary>Ещё одна задача</summary><p>Если в списке 6 нечётных чисел, сколько раз проверится условие и что вернёт функция?</p><details><summary>Подсказка</summary><p>Отдельно посчитай входы в if и случаи, когда условие истинно.</p></details>
-<details><summary>Сверить ответ</summary><p>6 проверок, ответ 0. Цикл посетит каждый элемент, счётчик ни разу не увеличится.</p></details></details></section><section class="quiz" id="quiz"><h2>Проверь себя</h2><form><fieldset data-answer="1"><legend>1. В списке 8 чисел. Сколько раз цикл проверит чётность?</legend>
-<div class="options"><label><input type="radio" name="q1" value="0"><span>4</span></label><label><input type="radio" name="q1" value="1"><span>8</span></label><label><input type="radio" name="q1" value="2"><span>16</span></label></div><p class="feedback" role="status" data-why="На каждое число приходится одна проверка."></p></fieldset><fieldset data-answer="2"><legend>2. Как растёт число проверок при одном проходе?</legend>
-<div class="options"><label><input type="radio" name="q2" value="0"><span>O(1)</span></label><label><input type="radio" name="q2" value="1"><span>O(n²)</span></label><label><input type="radio" name="q2" value="2"><span>O(n)</span></label></div><p class="feedback" role="status" data-why="Вдвое больше чисел — вдвое больше проверок."></p></fieldset>
-<div class="controls"><button type="reset">Сбросить ответы</button></div></form></section></article></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>
+<details><summary>Сверить ответ</summary><p>6 проверок, ответ 0. Цикл посетит каждый элемент, счётчик ни разу не увеличится.</p></details></details></section><section class="quiz" id="quiz"><h2>Проверь себя</h2><div class="question" role="group" aria-labelledby="question-1">
+<header><span class="eyebrow">Вопрос 1 из 2</span><h3 id="question-1">В списке 8 чисел. Сколько раз цикл проверит чётность?</h3></header>
+<div class="options"><div class="choice"><button type="button" data-correct="0"
+data-reason="Даже нечётные числа проходят проверку внутри цикла."><span class="letter" aria-hidden="true">А</span>
+<span>4</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="1"
+data-reason="На каждое число приходится одна проверка."><span class="letter" aria-hidden="true">Б</span>
+<span>8</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="0"
+data-reason="Цикл посещает каждый элемент только один раз."><span class="letter" aria-hidden="true">В</span>
+<span>16</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div></div><span class="sr-only" role="status"></span></div><div class="question" role="group" aria-labelledby="question-2">
+<header><span class="eyebrow">Вопрос 2 из 2</span><h3 id="question-2">Как растёт число проверок при одном проходе?</h3></header>
+<div class="options"><div class="choice"><button type="button" data-correct="0"
+data-reason="Чем длиннее список, тем больше проверок."><span class="letter" aria-hidden="true">А</span>
+<span>O(1)</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="0"
+data-reason="Для квадратичного роста понадобился бы ещё один полный проход для каждого числа."><span class="letter" aria-hidden="true">Б</span>
+<span>O(n²)</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div><div class="choice"><button type="button" data-correct="1"
+data-reason="Вдвое больше чисел — вдвое больше проверок."><span class="letter" aria-hidden="true">В</span>
+<span>O(n)</span><span class="mark" aria-hidden="true"></span></button>
+<p class="answer-note" hidden></p></div></div><span class="sr-only" role="status"></span></div>
+<div class="controls"><button type="button" data-retry>Ответить заново</button></div></section></article></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>
