@@ -5,28 +5,15 @@
 <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
 <nav class="topnav" aria-label="Навигация"><a href="index.html#topics">Оглавление</a></nav></div></header>
 <main class="shell home" id="main">
-<section class="hero"><div class="hero-copy"><p class="eyebrow hero-label">СПРАВОЧНИК ГУСЕЙНА ГАСАНОВА</p>
-<h1>Алгоритмы<br>на Python<span class="hero-dot">.</span></h1>
+<section class="hero"><p class="eyebrow hero-label">СПРАВОЧНИК ГУСЕЙНА ГАСАНОВА</p>
+<h1>Алгоритмы на Python<span class="hero-dot">.</span></h1>
 <p class="hero-description">Как узнать задачу, пройти пример руками и объяснить своё решение на собеседовании.</p>
-<a class="button" href="#topics">Выбрать тему</a></div><div class="hero-visual"><div class="visual-grid"></div>
-<div class="hero-code"><div class="hero-code-header"><span></span><span></span><span></span><b>window.py</b></div>
-<div class="hero-code-body"><div class="code-comment"># Сдвиг окна</div><div>total -= nums[right - k]</div><div>total += nums[right]</div></div></div></div></section>
-<section class="topics" id="topics"><div class="topics-heading"><h2>Темы справочника</h2><span class="topic-count">7 конспектов</span></div><section class="group"><h3>Основы</h3><div class="card-list"><a class="topic-card" href="topics/big-o.html"><span class="topic-info">
-<strong>Как считать сложность</strong>
-<span>В условии спрашивают, что станет со временем работы, если список вырастет.</span></span><span class="topic-action">Читать</span></a><a class="topic-card" href="topics/indices.html"><span class="topic-info">
-<strong>Индексы и границы</strong>
-<span>Даны позиции или нужно обработать только часть списка.</span></span><span class="topic-action">Читать</span></a></div></section><section class="group"><h3>Массивы</h3><div class="card-list"><a class="topic-card" href="topics/fixed-window.html"><span class="topic-info">
-<strong>Окно фиксированной длины</strong>
-<span>В условии есть «подряд» и «ровно k». Например, нужна наибольшая сумма за три соседних дня.</span></span><span class="topic-action">Читать</span></a><a class="topic-card" href="topics/variable-window.html"><span class="topic-info">
-<strong>Окно переменной длины</strong>
-<span>Нужен самый короткий непрерывный участок с суммой хотя бы target. Все числа положительные, target больше нуля.</span></span><span class="topic-action">Читать</span></a><a class="topic-card" href="topics/prefix.html"><span class="topic-info">
-<strong>Префиксные суммы</strong>
-<span>Список остаётся одним и тем же, но просят суммы на разных участках.</span></span><span class="topic-action">Читать</span></a></div></section><section class="group"><h3>Хеш-структуры</h3><div class="card-list"><a class="topic-card" href="topics/set.html"><span class="topic-info">
-<strong>Множество и повторы</strong>
-<span>Вопрос к каждому числу один: встречал ли я его раньше?</span></span><span class="topic-action">Читать</span></a><a class="topic-card" href="topics/dict.html"><span class="topic-info">
-<strong>Словарь и частоты</strong>
-<span>Нужно помнить дополнительную информацию о числе. Например, сколько раз оно уже встретилось.</span></span><span class="topic-action">Читать</span></a></div></section></section><section class="quiz" id="quiz"><h2>Проверь себя</h2><form><fieldset data-answer="1"><legend>1. В условии сказано «ровно три дня подряд». Какой разбор открыть?</legend>
-<div class="options"><label><input type="radio" required name="q1" value="0"><span>Префиксные суммы</span></label><label><input type="radio" required name="q1" value="1"><span>Окно фиксированной длины</span></label><label><input type="radio" required name="q1" value="2"><span>Словарь и частоты</span></label></div><p class="feedback" hidden data-why="Участок непрерывный, его длина заранее известна."></p></fieldset><fieldset data-answer="0"><legend>2. Чем удобно отмечать числа, которые уже встречались?</legend>
-<div class="options"><label><input type="radio" required name="q2" value="0"><span>Множеством set</span></label><label><input type="radio" required name="q2" value="1"><span>Одним счётчиком</span></label><label><input type="radio" required name="q2" value="2"><span>Строкой с индексом</span></label></div><p class="feedback" hidden data-why="Множество хранит разные числа и позволяет проверять x in seen."></p></fieldset>
-<div class="controls"><button class="primary">Проверить ответы</button><button type="reset">Начать заново</button>
-<strong role="status" class="score"></strong></div></form></section></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>
+<a class="button" href="#topics">Выбрать тему</a></section>
+<section class="topics" id="topics"><h2>Темы справочника</h2><section class="group"><h3>Основы</h3><div class="card-list"><a class="topic-card" href="topics/big-o.html">
+<strong>Как считать сложность</strong><span>Оцениваем время и память по коду.</span></a><a class="topic-card" href="topics/indices.html">
+<strong>Индексы и границы</strong><span>Выбираем участок списка и проверяем его границы.</span></a></div></section><section class="group"><h3>Массивы</h3><div class="card-list"><a class="topic-card" href="topics/fixed-window.html">
+<strong>Окно фиксированной длины</strong><span>Обновляем сумму при сдвиге окна.</span></a><a class="topic-card" href="topics/variable-window.html">
+<strong>Окно переменной длины</strong><span>Расширяем и сужаем окно по условию.</span></a><a class="topic-card" href="topics/prefix.html">
+<strong>Префиксные суммы</strong><span>Находим сумму любого участка списка.</span></a></div></section><section class="group"><h3>Хеш-структуры</h3><div class="card-list"><a class="topic-card" href="topics/set.html">
+<strong>Множество и повторы</strong><span>Удаляем повторы и сохраняем порядок.</span></a><a class="topic-card" href="topics/dict.html">
+<strong>Словарь и частоты</strong><span>Считаем, сколько раз встретился каждый элемент.</span></a></div></section></section></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>

@@ -21,9 +21,8 @@ def page(title, body, depth=''):
 
 
 def topic_card(item):
-    return f'''<a class="topic-card" href="topics/{item['slug']}.html"><span class="topic-info">
-<strong>{item['title']}</strong>
-<span>{item['signal']}</span></span><span class="topic-action">Читать</span></a>'''
+    return f'''<a class="topic-card" href="topics/{item['slug']}.html">
+<strong>{escape(item['title'])}</strong><span>{escape(item['summary'])}</span></a>'''
 
 
 def homepage():
@@ -33,26 +32,23 @@ def homepage():
         cards = ''.join(topic_card(item) for item in lessons if item['group'] == group)
         catalog += f'<section class="group"><h3>{group}</h3><div class="card-list">{cards}</div></section>'
     return page('Алгоритмы на Python', f'''<main class="shell home" id="main">
-<section class="hero"><div class="hero-copy"><p class="eyebrow hero-label">СПРАВОЧНИК ГУСЕЙНА ГАСАНОВА</p>
-<h1>Алгоритмы<br>на Python<span class="hero-dot">.</span></h1>
+<section class="hero"><p class="eyebrow hero-label">СПРАВОЧНИК ГУСЕЙНА ГАСАНОВА</p>
+<h1>Алгоритмы на Python<span class="hero-dot">.</span></h1>
 <p class="hero-description">Как узнать задачу, пройти пример руками и объяснить своё решение на собеседовании.</p>
-<a class="button" href="#topics">Выбрать тему</a></div><div class="hero-visual"><div class="visual-grid"></div>
-<div class="hero-code"><div class="hero-code-header"><span></span><span></span><span></span><b>window.py</b></div>
-<div class="hero-code-body"><div class="code-comment"># Сдвиг окна</div><div>total -= nums[right - k]</div><div>total += nums[right]</div></div></div></div></section>
-<section class="topics" id="topics"><div class="topics-heading"><h2>Темы справочника</h2><span class="topic-count">{len(lessons)} конспектов</span></div>{catalog}</section>{quiz("home")}</main>''')
+<a class="button" href="#topics">Выбрать тему</a></section>
+<section class="topics" id="topics"><h2>Темы справочника</h2>{catalog}</section></main>''')
 
 
 def quiz(slug):
     fields = []
     for number, (question, options, correct, why) in enumerate(QUESTIONS[slug], 1):
         choices = ''.join(
-            f'<label><input type="radio" required name="q{number}" value="{i}"><span>{escape(option)}</span></label>'
+            f'<label><input type="radio" name="q{number}" value="{i}"><span>{escape(option)}</span></label>'
             for i, option in enumerate(options))
         fields.append(f'''<fieldset data-answer="{correct}"><legend>{number}. {escape(question)}</legend>
-<div class="options">{choices}</div><p class="feedback" hidden data-why="{escape(why, quote=True)}"></p></fieldset>''')
+<div class="options">{choices}</div><p class="feedback" role="status" data-why="{escape(why, quote=True)}"></p></fieldset>''')
     return f'''<section class="quiz" id="quiz"><h2>Проверь себя</h2><form>{''.join(fields)}
-<div class="controls"><button class="primary">Проверить ответы</button><button type="reset">Начать заново</button>
-<strong role="status" class="score"></strong></div></form></section>'''
+<div class="controls"><button type="reset">Сбросить ответы</button></div></form></section>'''
 
 
 def player(d):
@@ -62,11 +58,14 @@ def player(d):
                        for i,line in enumerate(d['code'].splitlines(), 1))
     data = escape(json.dumps([dict(vars(f), state={key: value if isinstance(value, str) else repr(value) for key, value in f.state.items()}) for f in frames], ensure_ascii=False), quote=True)
     return f'''<div class="player" data-frames="{data}">
-<div class="lab"><div class="source" id="code"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy>Копировать</button></div>
-<pre><code>{lines}</code></pre></div><div class="memory"><h3>Список nums</h3><div class="cells">{cells}</div><h3>Переменные</h3><dl></dl></div></div>
-<div class="explain" aria-live="polite"></div><div class="controls">
-<button data-step="first">В начало</button><button data-step="back">Назад</button><button class="primary" data-step="next">Дальше</button><button data-step="last">В конец</button>
-<span class="counter"></span></div></div>'''
+<div class="controls player-controls" role="group" aria-label="Управление разбором">
+<button type="button" data-step="first">В начало</button><button type="button" data-step="back">Назад</button>
+<button type="button" class="primary" data-step="next">Дальше</button><button type="button" data-step="last">В конец</button>
+<span class="counter"></span></div>
+<div class="source" id="code"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy>Копировать</button></div>
+<pre tabindex="0" aria-label="Код примера"><code>{lines}</code></pre></div>
+<div class="memory"><h3>Список nums</h3><div class="cells">{cells}</div><h3>Переменные</h3><dl></dl></div>
+<p class="explain" aria-live="polite"></p></div>'''
 
 
 def window_lab():
@@ -93,13 +92,13 @@ def article(d):
     return page(d['title'], f'''<main class="shell reading" id="main"><article>
 <header class="lesson-head"><p class="eyebrow">{d['group']}</p><h1>{d['title']}</h1><p>{d['signal']}</p></header>
 <nav class="jump" aria-label="На этой странице"><a href="#trace">Разбор</a><a href="#cost">Сложность</a><a href="#practice">Практика</a><a href="#quiz">Тест</a></nav>
-<div class="idea" id="idea"><h2>Как я рассуждаю</h2><p>{d['idea']}</p></div>
+<section class="idea" id="idea"><h2>Как я рассуждаю</h2><p>{d['idea']}</p></section>
 <section id="trace"><h2>Разбор по шагам</h2><p>{d['problem']}</p>{player(d)}{trace_table(d)}
 <details><summary>Вывод программы</summary><pre>{escape(d['output'])}</pre></details></section>{extra}
-<div class="pair"><section id="cost"><h2>Сложность и границы</h2><p>{d['cost']}</p><p class="note">{d['edge']}</p></section>
+<section id="cost"><h2>Сложность и границы</h2><p>{d['cost']}</p><details><summary>Границы и частые ошибки</summary><p>{d['edge']}</p></details></section>
 <section id="practice"><h2>Самостоятельная практика</h2><p>{task}</p><details><summary>Примеры для проверки</summary><p>{cases}</p></details>
 <details><summary>Ещё одна задача</summary><p>{d['quiz']}</p><details><summary>Подсказка</summary><p>{d['hint']}</p></details>
-<details><summary>Сверить ответ</summary><p>{d['answer']}</p></details></details></section></div>{quiz(slug)}</article></main>''','../')
+<details><summary>Сверить ответ</summary><p>{d['answer']}</p></details></details></section>{quiz(slug)}</article></main>''','../')
 
 
 if __name__ == '__main__':

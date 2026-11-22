@@ -45,29 +45,20 @@ function setupPlayer(player) {
 }
 
 function setupQuiz(form) {
-  const fields = [...form.querySelectorAll('fieldset')]
-  function clear() {
-    for (const field of fields) {
-      field.querySelector('.feedback').hidden = true
-      field.removeAttribute('data-result')
-    }
-    form.querySelector('.score').textContent = ''
-  }
-  form.addEventListener('submit', event => {
-    event.preventDefault()
-    let score = 0
-    for (const field of fields) {
-      const correct = field.querySelector(':checked').value === field.dataset.answer
-      if (correct) score++
-      const feedback = field.querySelector('.feedback')
-      feedback.hidden = false
-      feedback.textContent = (correct ? 'Верно. ' : 'Пока неверно. ') + feedback.dataset.why
+  for (const field of form.querySelectorAll('fieldset')) {
+    const feedback = field.querySelector('.feedback')
+
+    field.addEventListener('change', event => {
+      const correct = event.target.value === field.dataset.answer
+      feedback.textContent = (correct ? 'Верно. ' : 'Неверно. ') + feedback.dataset.why
       field.dataset.result = correct ? 'yes' : 'no'
-    }
-    form.querySelector('.score').textContent = 'Результат: ' + score + ' из ' + fields.length
-  })
-  form.addEventListener('reset', clear)
-  form.addEventListener('change', clear)
+    })
+
+    form.addEventListener('reset', () => {
+      feedback.textContent = ''
+      field.removeAttribute('data-result')
+    })
+  }
 }
 
 function setupWindow(box) {
