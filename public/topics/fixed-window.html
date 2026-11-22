@@ -3,27 +3,34 @@
 <title>Окно фиксированной длины · Hashanov</title><link rel="stylesheet" href="../style.css"><script defer src="../script.js"></script></head>
 <body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
 <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
-<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/index.html">Курс ОП.04</a></nav></div></header>
-<main class="shell lesson-layout" id="main"><article class="lesson"><header class="lesson-header">
-<p class="eyebrow">Массивы / Занятие 9</p><h1>Окно фиксированной длины</h1><p class="lesson-intro">В условии есть «подряд» и «ровно k». Например, нужна наибольшая сумма за три соседних дня.</p></header>
-<section id="idea"><h2>Как я рассуждаю</h2><p>Первое окно считаю целиком. Потом сдвигаюсь на один шаг. Одно число ушло слева, одно пришло справа. Вычитаю ушедшее и прибавляю пришедшее.</p></section>
-<section id="trace"><h2>Разбор по шагам</h2><p>За пять дней решено [2, 5, 1, 6, 3] задач. Сколько максимум удалось решить за три дня подряд?</p>
-<div class="table-wrap"><table><thead><tr><th scope="col">Окно</th><th scope="col">Что изменилось</th><th scope="col">Сумма</th><th scope="col">Лучшая</th></tr></thead><tbody><tr><td>2, 5, 1</td><td>Старт</td><td>8</td><td>8</td></tr><tr><td>5, 1, 6</td><td>−2 +6</td><td>12</td><td>12</td></tr><tr><td>1, 6, 3</td><td>−5 +3</td><td>10</td><td>12</td></tr></tbody></table></div></section>
-<section id="code"><h2>Решение на Python</h2><div class="code-panel"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy hidden>Копировать</button></div>
-<pre><code>def best_sum(nums, k):
-    if not 1 &lt;= k &lt;= len(nums):
-        return None
-    current = sum(nums[i] for i in range(k))
-    best = current
-    for right in range(k, len(nums)):
-        current -= nums[right - k]
-        current += nums[right]
-        best = max(best, current)
-    return best
-
-print(best_sum([2, 5, 1, 6, 3], 3))</code></pre></div><p>Вывод программы</p><pre class="result">12</pre></section>
-<section id="cost"><h2>Сложность и границы</h2><p>O(n) времени и O(1) дополнительной памяти. На сдвиг тратим две арифметические операции. Если заново суммировать каждое окно, потребуется до O(nk) времени.</p><p class="note">best начинаем с суммы первого окна. При отрицательных числах ноль может оказаться больше любой настоящей суммы. Для неподходящего k функция возвращает None.</p></section>
-<section id="practice"><h2>Проверь себя</h2><p>Список [−5, −2, −3], k = 2. Чему равна лучшая сумма?</p><details><summary>Подсказка</summary><p>Есть всего два окна. Выпиши обе суммы.</p></details>
-<details><summary>Сверить ответ</summary><p>−5. Суммы окон равны −7 и −5.</p></details><h3>Теперь напиши сам</h3><p>Напиши worst_sum(nums, k). Найди наименьшую сумму среди окон длины k. Для недопустимого k верни None.</p><details><summary>Примеры для проверки</summary><p>worst_sum([3, 1, 5, 2], 2) → 4; worst_sum([-4, -2], 1) → -4; worst_sum([], 1) → None.</p></details></section>
-<section><p><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/massivy/index.html">Материал преподавателя по теме · ОП.04</a></p><a href="../index.html#topics">Все темы Hashanov</a></section></article>
-<nav class="article-nav" aria-label="Содержание темы"><p>В конспекте</p><a href="#idea">Идея</a><a href="#trace">Ручной прогон</a><a href="#code">Код</a><a href="#cost">Сложность и границы</a><a href="#practice">Практика</a></nav></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>
+<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a></nav></div></header>
+<main class="shell reading" id="main"><article>
+<header class="lesson-head"><p class="eyebrow">Массивы</p><h1>Окно фиксированной длины</h1><p>В условии есть «подряд» и «ровно k». Например, нужна наибольшая сумма за три соседних дня.</p></header>
+<nav class="jump" aria-label="На этой странице"><a href="#trace">Разбор</a><a href="#cost">Сложность</a><a href="#practice">Практика</a><a href="#quiz">Тест</a></nav>
+<div class="idea" id="idea"><h2>Как я рассуждаю</h2><p>Первое окно считаю целиком. Потом сдвигаюсь на один шаг. Одно число ушло слева, одно пришло справа. Вычитаю ушедшее и прибавляю пришедшее.</p></div>
+<section id="trace"><h2>Разбор по шагам</h2><p>За пять дней решено [2, 5, 1, 6, 3] задач. Сколько максимум удалось решить за три дня подряд?</p><div class="player" data-frames="[{&quot;line&quot;: 4, &quot;indices&quot;: [0, 1, 2], &quot;state&quot;: {&quot;k&quot;: &quot;3&quot;, &quot;current&quot;: &quot;8&quot;}, &quot;note&quot;: &quot;Первое окно считаем целиком: 2 + 5 + 1.&quot;}, {&quot;line&quot;: 5, &quot;indices&quot;: [0, 1, 2], &quot;state&quot;: {&quot;current&quot;: &quot;8&quot;, &quot;best&quot;: &quot;8&quot;}, &quot;note&quot;: &quot;Эта сумма становится первым рекордом.&quot;}, {&quot;line&quot;: 7, &quot;indices&quot;: [1, 2], &quot;state&quot;: {&quot;right&quot;: &quot;3&quot;, &quot;current&quot;: &quot;6&quot;, &quot;best&quot;: &quot;8&quot;}, &quot;note&quot;: &quot;Уходит число 2 с индекса 0.&quot;}, {&quot;line&quot;: 8, &quot;indices&quot;: [1, 2, 3], &quot;state&quot;: {&quot;current&quot;: &quot;12&quot;, &quot;best&quot;: &quot;8&quot;}, &quot;note&quot;: &quot;Добавляем справа 6. В окне снова три числа.&quot;}, {&quot;line&quot;: 9, &quot;indices&quot;: [1, 2, 3], &quot;state&quot;: {&quot;current&quot;: &quot;12&quot;, &quot;best&quot;: &quot;12&quot;}, &quot;note&quot;: &quot;Сравниваем сумму окна с лучшей суммой.&quot;}, {&quot;line&quot;: 7, &quot;indices&quot;: [2, 3], &quot;state&quot;: {&quot;right&quot;: &quot;4&quot;, &quot;current&quot;: &quot;7&quot;, &quot;best&quot;: &quot;12&quot;}, &quot;note&quot;: &quot;Уходит число 5 с индекса 1.&quot;}, {&quot;line&quot;: 8, &quot;indices&quot;: [2, 3, 4], &quot;state&quot;: {&quot;current&quot;: &quot;10&quot;, &quot;best&quot;: &quot;12&quot;}, &quot;note&quot;: &quot;Добавляем справа 3. В окне снова три числа.&quot;}, {&quot;line&quot;: 9, &quot;indices&quot;: [2, 3, 4], &quot;state&quot;: {&quot;current&quot;: &quot;10&quot;, &quot;best&quot;: &quot;12&quot;}, &quot;note&quot;: &quot;Сравниваем сумму окна с лучшей суммой.&quot;}, {&quot;line&quot;: 10, &quot;indices&quot;: [1, 2, 3], &quot;state&quot;: {&quot;best&quot;: &quot;12&quot;}, &quot;note&quot;: &quot;Лучшее окно выделено: 5 + 1 + 6 = 12.&quot;}]">
+<div class="lab"><div class="source" id="code"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy>Копировать</button></div>
+<pre><code><span class="line" data-line="1">def best_sum(nums, k):</span>
+<span class="line" data-line="2">    if not 1 &lt;= k &lt;= len(nums):</span>
+<span class="line" data-line="3">        return None</span>
+<span class="line" data-line="4">    current = sum(nums[i] for i in range(k))</span>
+<span class="line" data-line="5">    best = current</span>
+<span class="line" data-line="6">    for right in range(k, len(nums)):</span>
+<span class="line" data-line="7">        current -= nums[right - k]</span>
+<span class="line" data-line="8">        current += nums[right]</span>
+<span class="line" data-line="9">        best = max(best, current)</span>
+<span class="line" data-line="10">    return best</span>
+<span class="line" data-line="11"></span>
+<span class="line" data-line="12">print(best_sum([2, 5, 1, 6, 3], 3))</span></code></pre></div><div class="memory"><h3>Список nums</h3><div class="cells"><span class="cell"><small>0</small><b>2</b></span><span class="cell"><small>1</small><b>5</b></span><span class="cell"><small>2</small><b>1</b></span><span class="cell"><small>3</small><b>6</b></span><span class="cell"><small>4</small><b>3</b></span></div><h3>Переменные</h3><dl></dl></div></div>
+<div class="explain" aria-live="polite"></div><div class="controls">
+<button data-step="first">В начало</button><button data-step="back">Назад</button><button class="primary" data-step="next">Дальше</button><button data-step="last">В конец</button>
+<span class="counter"></span></div></div><details><summary>Весь прогон таблицей</summary><div class="table-scroll"><table><thead><tr><th scope="col">Окно</th><th scope="col">Что изменилось</th><th scope="col">Сумма</th><th scope="col">Лучшая</th></tr></thead><tbody><tr><td>2, 5, 1</td><td>Старт</td><td>8</td><td>8</td></tr><tr><td>5, 1, 6</td><td>−2 +6</td><td>12</td><td>12</td></tr><tr><td>1, 6, 3</td><td>−5 +3</td><td>10</td><td>12</td></tr></tbody></table></div></details>
+<details><summary>Вывод программы</summary><pre>12</pre></details></section>
+<div class="pair"><section id="cost"><h2>Сложность и границы</h2><p>O(n) времени и O(1) дополнительной памяти. На сдвиг тратим две арифметические операции. Если заново суммировать каждое окно, потребуется до O(nk) времени.</p><p class="note">best начинаем с суммы первого окна. При отрицательных числах ноль может оказаться больше любой настоящей суммы. Для неподходящего k функция возвращает None.</p></section>
+<section id="practice"><h2>Самостоятельная практика</h2><p>Напиши worst_sum(nums, k). Найди наименьшую сумму среди окон длины k. Для недопустимого k верни None.</p><details><summary>Примеры для проверки</summary><p>worst_sum([3, 1, 5, 2], 2) → 4; worst_sum([-4, -2], 1) → -4; worst_sum([], 1) → None.</p></details>
+<details><summary>Ещё одна задача</summary><p>Список [−5, −2, −3], k = 2. Чему равна лучшая сумма?</p><details><summary>Подсказка</summary><p>Есть всего два окна. Выпиши обе суммы.</p></details>
+<details><summary>Сверить ответ</summary><p>−5. Суммы окон равны −7 и −5.</p></details></details></section></div><section class="quiz" id="quiz"><h2>Проверь себя</h2><form><fieldset data-answer="2"><legend>1. Окно [2, 5, 1] сдвинули на шаг. Справа входит 6. Что вычесть?</legend>
+<div class="options"><label><input type="radio" required name="q1" value="0"><span>5</span></label><label><input type="radio" required name="q1" value="1"><span>1</span></label><label><input type="radio" required name="q1" value="2"><span>2</span></label></div><p class="feedback" hidden data-why="Левый элемент 2 покидает окно."></p></fieldset><fieldset data-answer="1"><legend>2. С чего начать best, если числа могут быть отрицательными?</legend>
+<div class="options"><label><input type="radio" required name="q2" value="0"><span>С нуля</span></label><label><input type="radio" required name="q2" value="1"><span>С суммы первого окна</span></label><label><input type="radio" required name="q2" value="2"><span>С длины списка</span></label></div><p class="feedback" hidden data-why="Начальное значение должно быть суммой реально существующего окна."></p></fieldset>
+<div class="controls"><button class="primary">Проверить ответы</button><button type="reset">Начать заново</button>
+<strong role="status" class="score"></strong></div></form></section></article></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>
