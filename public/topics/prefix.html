@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Префиксные суммы · Hashanov</title><link rel="stylesheet" href="../style.css"><script defer src="../script.js"></script></head>
+<body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
+<a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
+<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/index.html">Курс ОП.04</a></nav></div></header>
+<main class="shell lesson-layout" id="main"><article class="lesson"><header class="lesson-header">
+<p class="eyebrow">Массивы / Занятие 11</p><h1>Префиксные суммы</h1><p class="lesson-intro">Список остаётся одним и тем же, но просят суммы на разных участках.</p></header>
+<section id="idea"><h2>Как я рассуждаю</h2><p>Записываю, сколько накопилось до каждой границы. prefix[0] = 0, потому что до начала списка ничего нет. Чтобы получить сумму [left, right), из накопленного до right вычитаю всё, что было до left.</p></section>
+<section id="trace"><h2>Разбор по шагам</h2><p>Даны [3, 1, 4, 2]. Найди суммы на участках [1, 3) и [0, 4).</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Граница i</th><th scope="col">Сколько чисел учли</th><th scope="col">prefix[i]</th></tr></thead><tbody><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>3</td></tr><tr><td>2</td><td>2</td><td>4</td></tr><tr><td>3</td><td>3</td><td>8</td></tr><tr><td>4</td><td>4</td><td>10</td></tr></tbody></table></div></section>
+<section id="code"><h2>Решение на Python</h2><div class="code-panel"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy hidden>Копировать</button></div>
+<pre><code>nums = [3, 1, 4, 2]
+prefix = [0]
+for x in nums:
+    prefix.append(prefix[-1] + x)
+
+for left, right in [(1, 3), (0, 4)]:
+    print(prefix[right] - prefix[left])</code></pre></div><p>Вывод программы</p><pre class="result">5
+10</pre></section>
+<section id="cost"><h2>Сложность и границы</h2><p>Построение занимает O(n) времени и O(n) памяти. Один запрос — O(1), все q запросов вместе с построением — O(n + q). Для первого запроса: 8 − 3 = 5.</p><p class="note">Если правая граница включена в условии, для неё нужен prefix[right + 1]. При изменении числа в исходном списке соответствующие префиксы придётся обновить.</p></section>
+<section id="practice"><h2>Проверь себя</h2><p>Для тех же чисел что дадут участки [2, 4) и [2, 2)?</p><details><summary>Подсказка</summary><p>Во втором запросе обе границы одинаковы.</p></details>
+<details><summary>Сверить ответ</summary><p>6 и 0. Для первого участка 10 − 4 = 6, для пустого участка 4 − 4 = 0.</p></details><h3>Теперь напиши сам</h3><p>Напиши range_sums(nums, queries). Для каждого запроса (left, right) верни сумму [left, right). Построй префиксы один раз.</p><details><summary>Примеры для проверки</summary><p>range_sums([2, -3, 4], [(0, 3), (1, 3), (1, 1)]) → [3, 1, 0].</p></details></section>
+<section><p><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/massivy/index.html">Материал преподавателя по теме · ОП.04</a></p><a href="../index.html#topics">Все темы Hashanov</a></section></article>
+<nav class="article-nav" aria-label="Содержание темы"><p>В конспекте</p><a href="#idea">Идея</a><a href="#trace">Ручной прогон</a><a href="#code">Код</a><a href="#cost">Сложность и границы</a><a href="#practice">Практика</a></nav></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>

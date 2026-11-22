@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Словарь и частоты · Hashanov</title><link rel="stylesheet" href="../style.css"><script defer src="../script.js"></script></head>
+<body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
+<a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
+<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/index.html">Курс ОП.04</a></nav></div></header>
+<main class="shell lesson-layout" id="main"><article class="lesson"><header class="lesson-header">
+<p class="eyebrow">Хеш-структуры / Модули 0 и 17 · применение к частотам</p><h1>Словарь и частоты</h1><p class="lesson-intro">Нужно помнить дополнительную информацию о числе. Например, сколько раз оно уже встретилось.</p></header>
+<section id="idea"><h2>Как я рассуждаю</h2><p>Число беру как ключ, количество — как значение. Если ключ новый, начинаю с нуля. При каждом появлении увеличиваю его счётчик на один.</p></section>
+<section id="trace"><h2>Разбор по шагам</h2><p>Посчитай, сколько раз каждое число встречается в списке [4, 7, 4, 4].</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Ключ</th><th scope="col">Было</th><th scope="col">Стало</th></tr></thead><tbody><tr><td>4</td><td>0</td><td>1</td></tr><tr><td>7</td><td>0</td><td>1</td></tr><tr><td>4</td><td>1</td><td>2</td></tr><tr><td>4</td><td>2</td><td>3</td></tr></tbody></table></div></section>
+<section id="code"><h2>Решение на Python</h2><div class="code-panel"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy hidden>Копировать</button></div>
+<pre><code>nums = [4, 7, 4, 4]
+counts = {}
+for x in nums:
+    counts[x] = counts.get(x, 0) + 1
+print(counts)</code></pre></div><p>Вывод программы</p><pre class="result">{4: 3, 7: 1}</pre></section>
+<section id="cost"><h2>Сложность и границы</h2><p>Для целочисленных ключей получение и запись в среднем занимают O(1). Проход занимает O(n) в среднем. В словаре k записей по количеству разных чисел, память O(k).</p><p class="note">counts[x] += 1 для нового ключа вызовет KeyError. Вызов get(x, 0) даёт стартовое значение; запись появляется при присваивании counts[x] = … .</p></section>
+<section id="practice"><h2>Проверь себя</h2><p>Как изменится словарь после ещё одной семёрки? Изменится ли len(counts)?</p><details><summary>Подсказка</summary><p>Длина словаря равна числу разных ключей.</p></details>
+<details><summary>Сверить ответ</summary><p>{4: 3, 7: 2}. Длина останется равной 2, потому что ключ 7 уже был.</p></details><h3>Теперь напиши сам</h3><p>Напиши first_single(nums). Верни первое число, которое встретилось ровно один раз. Если такого числа нет, верни None.</p><details><summary>Примеры для проверки</summary><p>first_single([4, 7, 4, 2]) → 7; first_single([3, 3]) → None. Подсказка: сначала собери частоты, затем пройди по исходному списку.</p></details></section>
+<section><p><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/hesh/index.html">Материал преподавателя по теме · ОП.04</a></p><a href="../index.html#topics">Все темы Hashanov</a></section></article>
+<nav class="article-nav" aria-label="Содержание темы"><p>В конспекте</p><a href="#idea">Идея</a><a href="#trace">Ручной прогон</a><a href="#code">Код</a><a href="#cost">Сложность и границы</a><a href="#practice">Практика</a></nav></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>

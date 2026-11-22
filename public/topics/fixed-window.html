@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Окно фиксированной длины · Hashanov</title><link rel="stylesheet" href="../style.css"><script defer src="../script.js"></script></head>
+<body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
+<a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
+<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/index.html">Курс ОП.04</a></nav></div></header>
+<main class="shell lesson-layout" id="main"><article class="lesson"><header class="lesson-header">
+<p class="eyebrow">Массивы / Занятие 9</p><h1>Окно фиксированной длины</h1><p class="lesson-intro">В условии есть «подряд» и «ровно k». Например, нужна наибольшая сумма за три соседних дня.</p></header>
+<section id="idea"><h2>Как я рассуждаю</h2><p>Первое окно считаю целиком. Потом сдвигаюсь на один шаг. Одно число ушло слева, одно пришло справа. Вычитаю ушедшее и прибавляю пришедшее.</p></section>
+<section id="trace"><h2>Разбор по шагам</h2><p>За пять дней решено [2, 5, 1, 6, 3] задач. Сколько максимум удалось решить за три дня подряд?</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Окно</th><th scope="col">Что изменилось</th><th scope="col">Сумма</th><th scope="col">Лучшая</th></tr></thead><tbody><tr><td>2, 5, 1</td><td>Старт</td><td>8</td><td>8</td></tr><tr><td>5, 1, 6</td><td>−2 +6</td><td>12</td><td>12</td></tr><tr><td>1, 6, 3</td><td>−5 +3</td><td>10</td><td>12</td></tr></tbody></table></div></section>
+<section id="code"><h2>Решение на Python</h2><div class="code-panel"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy hidden>Копировать</button></div>
+<pre><code>def best_sum(nums, k):
+    if not 1 &lt;= k &lt;= len(nums):
+        return None
+    current = sum(nums[i] for i in range(k))
+    best = current
+    for right in range(k, len(nums)):
+        current -= nums[right - k]
+        current += nums[right]
+        best = max(best, current)
+    return best
+
+print(best_sum([2, 5, 1, 6, 3], 3))</code></pre></div><p>Вывод программы</p><pre class="result">12</pre></section>
+<section id="cost"><h2>Сложность и границы</h2><p>O(n) времени и O(1) дополнительной памяти. На сдвиг тратим две арифметические операции. Если заново суммировать каждое окно, потребуется до O(nk) времени.</p><p class="note">best начинаем с суммы первого окна. При отрицательных числах ноль может оказаться больше любой настоящей суммы. Для неподходящего k функция возвращает None.</p></section>
+<section id="practice"><h2>Проверь себя</h2><p>Список [−5, −2, −3], k = 2. Чему равна лучшая сумма?</p><details><summary>Подсказка</summary><p>Есть всего два окна. Выпиши обе суммы.</p></details>
+<details><summary>Сверить ответ</summary><p>−5. Суммы окон равны −7 и −5.</p></details><h3>Теперь напиши сам</h3><p>Напиши worst_sum(nums, k). Найди наименьшую сумму среди окон длины k. Для недопустимого k верни None.</p><details><summary>Примеры для проверки</summary><p>worst_sum([3, 1, 5, 2], 2) → 4; worst_sum([-4, -2], 1) → -4; worst_sum([], 1) → None.</p></details></section>
+<section><p><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/massivy/index.html">Материал преподавателя по теме · ОП.04</a></p><a href="../index.html#topics">Все темы Hashanov</a></section></article>
+<nav class="article-nav" aria-label="Содержание темы"><p>В конспекте</p><a href="#idea">Идея</a><a href="#trace">Ручной прогон</a><a href="#code">Код</a><a href="#cost">Сложность и границы</a><a href="#practice">Практика</a></nav></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>

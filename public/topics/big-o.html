@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как считать сложность · Hashanov</title><link rel="stylesheet" href="../style.css"><script defer src="../script.js"></script></head>
+<body><a class="skip" href="#main">К содержанию</a><header class="topbar"><div class="shell masthead">
+<a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">#</span>Hashanov<span class="brand-dot">.</span></a>
+<nav class="topnav" aria-label="Навигация"><a href="../index.html#topics">Оглавление</a><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/index.html">Курс ОП.04</a></nav></div></header>
+<main class="shell lesson-layout" id="main"><article class="lesson"><header class="lesson-header">
+<p class="eyebrow">Основы / Занятие 3</p><h1>Как считать сложность</h1><p class="lesson-intro">В условии спрашивают, что станет со временем работы, если список вырастет.</p></header>
+<section id="idea"><h2>Как я рассуждаю</h2><p>Сначала называю n. Здесь n — количество чисел. Потом считаю, сколько раз выполнится строка внутри цикла. Если на каждое число приходится одна проверка, при удвоении списка число проверок тоже удвоится.</p></section>
+<section id="trace"><h2>Разбор по шагам</h2><p>Посчитай, сколько чётных чисел в списке [4, 7, 2, 9].</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Число</th><th scope="col">Проверок всего</th><th scope="col">Чётных найдено</th></tr></thead><tbody><tr><td>4</td><td>1</td><td>1</td></tr><tr><td>7</td><td>2</td><td>1</td></tr><tr><td>2</td><td>3</td><td>2</td></tr><tr><td>9</td><td>4</td><td>2</td></tr></tbody></table></div></section>
+<section id="code"><h2>Решение на Python</h2><div class="code-panel"><div class="code-toolbar"><span>Python 3</span><button type="button" data-copy hidden>Копировать</button></div>
+<pre><code>def count_even(nums):
+    count = 0
+    for x in nums:
+        if x % 2 == 0:
+            count += 1
+    return count
+
+print(count_even([4, 7, 2, 9]))</code></pre></div><p>Вывод программы</p><pre class="result">2</pre></section>
+<section id="cost"><h2>Сложность и границы</h2><p>O(n) времени и O(1) дополнительной памяти. Проверок ровно n, даже если все числа нечётные. Два таких прохода подряд дают 2n проверок, то есть всё ещё O(n).</p><p class="note">Вложенный цикл требует отдельного подсчёта. Если для каждого из n чисел второй цикл перебирает все n чисел, получаем n × n проверок и O(n²).</p></section>
+<section id="practice"><h2>Проверь себя</h2><p>Если в списке 6 нечётных чисел, сколько раз проверится условие и что вернёт функция?</p><details><summary>Подсказка</summary><p>Отдельно посчитай входы в if и случаи, когда условие истинно.</p></details>
+<details><summary>Сверить ответ</summary><p>6 проверок, ответ 0. Цикл посетит каждый элемент, счётчик ни разу не увеличится.</p></details><h3>Теперь напиши сам</h3><p>Напиши count_above(nums, limit). Верни количество чисел строго больше limit за один проход.</p><details><summary>Примеры для проверки</summary><p>count_above([3, 5, 7, 5], 5) → 1; count_above([], 5) → 0.</p></details></section>
+<section><p><a href="https://algorthimization-course-vvodnoe.vercel.app/op04-algoritmizaciya/lessons/03-slozhnost-i-o-notaciya/index.html">Материал преподавателя по теме · ОП.04</a></p><a href="../index.html#topics">Все темы Hashanov</a></section></article>
+<nav class="article-nav" aria-label="Содержание темы"><p>В конспекте</p><a href="#idea">Идея</a><a href="#trace">Ручной прогон</a><a href="#code">Код</a><a href="#cost">Сложность и границы</a><a href="#practice">Практика</a></nav></main><footer class="shell footer"><span>Hashanov</span><span>Гусейн Гасанов</span></footer></body></html>
